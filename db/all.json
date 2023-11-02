@@ -1,0 +1,59 @@
+[
+    {
+        "ID": 1,
+        "Firstname": "Joe",
+        "Lastname": "Biden",
+        "Edit": "2023-11-01T13:09:17.2382572+05:00",
+        "Created": "2023-11-01T12:42:07.2604313+05:00",
+        "Account": [
+            {
+                "ID": 1,
+                "UserID": 1,
+                "Name": "card updated",
+                "Created": "2023-11-01T12:42:36.7669059+05:00",
+                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Transactions": null
+            },
+            {
+                "ID": 2,
+                "UserID": 1,
+                "Name": "card updated",
+                "Created": "2023-11-01T12:42:36.7669059+05:00",
+                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Transactions": null
+            },
+            {
+                "ID": 3,
+                "UserID": 1,
+                "Name": "card updated",
+                "Created": "2023-11-01T12:42:36.7669059+05:00",
+                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Transactions": null
+            },
+            {
+                "ID": 4,
+                "UserID": 1,
+                "Name": "card updated",
+                "Created": "2023-11-01T12:42:36.7669059+05:00",
+                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Transactions": null
+            },
+            {
+                "ID": 5,
+                "UserID": 1,
+                "Name": "card updated",
+                "Created": "2023-11-01T12:42:36.7669059+05:00",
+                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Transactions": null
+            },
+            {
+                "ID": 6,
+                "UserID": 1,
+                "Name": "bank card numer 23 ",
+                "Created": "2023-11-01T13:44:56.7845529+05:00",
+                "Edited": "2023-11-01T13:44:56.7845529+05:00",
+                "Transactions": null
+            }
+        ]
+    }
+]

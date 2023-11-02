@@ -12,111 +12,106 @@ import (
 func UserHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
+		fmt.Println("sent GET request to /users on", time.Now().Format(time.RFC822))
 		getUsers(w, r)
 	case "POST":
+		fmt.Println("sent POST request to /users on", time.Now().Format(time.RFC822))
 		createUser(w, r)
 	case "PUT":
+		fmt.Println("sent PUT request to /users on", time.Now().Format(time.RFC822))
 		updateUser(w, r)
 	case "DELETE":
+		fmt.Println("sent DELETE request to /users on", time.Now().Format(time.RFC822))
 		deleteUser(w, r)
 	}
 }
 func getUsers(w http.ResponseWriter, r *http.Request) {
-	var usersData []models.User
-	byteData, _ := os.ReadFile("db/users.json")
-	json.Unmarshal(byteData, &usersData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	for i := 0; i < len(usersData); i++ {
-		var accountsData []models.Account
-		byteData,_ := os.ReadFile("db/accounts.json")
-		json.Unmarshal(byteData, &accountsData)
-
-		for j := 0; j < len(accountsData); j++ {
-			if usersData[i].ID ==  accountsData[j].UserID {
-				usersData[i].Account = append(usersData[i].Account, accountsData[j])
-
-				var transactionsData []models.Transaction
-				byteData,_ := os.ReadFile("db/transactions.json")
-				json.Unmarshal(byteData, &transactionsData)
-
-				for k := 0; k < len(transactionsData); k++ {
-					if accountsData[j].ID == transactionsData[k].AccountID {
-						accountsData[i].Transactions = append(accountsData[i].Transactions, transactionsData[k])
-					}
-				}
-			}
-		}
-	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(allUser)
 }
 func createUser(w http.ResponseWriter, r *http.Request) {
 	var newUser models.User
 	json.NewDecoder(r.Body).Decode(&newUser)
 
-	var usersData []models.User
-	byteData, _ := os.ReadFile("db/users.json")
-	json.Unmarshal(byteData, &usersData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	newUser.ID = len(usersData)+1
-	newUser.Since = time.Now()
-	usersData = append(usersData, newUser)
+	newUser.ID = len(allUser) + 1
+	newUser.Created = time.Now()
+	newUser.Edit = time.Now()
 
-	result,_ := json.Marshal(usersData)
-	os.WriteFile("db/users.json", result, 0)
+	allUser = append(allUser, newUser)
+
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusCreated)
-	fmt.Println("user created!")
+	fmt.Fprint(w, "User created!")
 }
 func updateUser(w http.ResponseWriter, r *http.Request) {
 	var updateUser models.User
 	json.NewDecoder(r.Body).Decode(&updateUser)
 
-	var usersData []models.User
-	byteData,_ := os.ReadFile("db/users.json")
-	json.Unmarshal(byteData, &usersData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	var userFound bool
-	for i := 0; i < len(usersData); i++ {
-		if usersData[i].ID == updateUser.ID {
-			usersData[i].Firstname = updateUser.Firstname
-			usersData[i].Lastname = updateUser.Lastname
-			usersData[i].Edit = time.Now()
+	var userfound bool
 
-			userFound = true
+	for i := 0; i < len(allUser); i++ {
+		if allUser[i].ID == updateUser.ID {
+			allUser[i].Firstname = updateUser.Firstname
+			allUser[i].Lastname = updateUser.Lastname
+			allUser[i].Edit = time.Now()
+
+			userfound = true
 			break
 		}
- 	}
-	if !userFound {
+	}
+	if !userfound {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("User with such an ID not found.")
+		fmt.Fprint(w, "user not found.")
 		return
 	}
+
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
+
+	w.WriteHeader(http.StatusAccepted)
+	fmt.Fprint(w, "user updated")
 }
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 	var deleteUser models.User
 	json.NewDecoder(r.Body).Decode(&deleteUser)
 
-	var usersData []models.User
-	byteData, _ := os.ReadFile("db/users.json")
-	json.Unmarshal(byteData, &usersData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	var userFound bool
+	var userfound bool
 
-	for i := 0; i < len(usersData); i++ {
-		if usersData[i].ID == deleteUser.ID {
-			usersData = append(usersData[:i],usersData[i+1:]... )
-			userFound = true
+	for i := 0; i < len(allUser); i++ {
+		if allUser[i].ID == deleteUser.ID {
+			allUser = append(allUser[:i], allUser[i+1:]...)
+
+			userfound = true
 			break
 		}
 	}
-	if !userFound {
+	if !userfound {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("User with such an ID not found.")
+		fmt.Fprint(w, "user not found.")
 		return
 	}
 
-	result,_ := json.Marshal(usersData)
-	os.WriteFile("db/users.json", result, 0)
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusAccepted)
-	fmt.Println("user deleted!")
+	fmt.Fprint(w, "user deleted!")
 }

@@ -9,8 +9,8 @@ import (
 func main() {
 
 	// http.HandleFunc("/", handlers.GetHome())
-	http.HandleFunc("/user", handlers.UserHandler)
-	http.HandleFunc("/transaction", handlers.TransactionHandler)
+	http.HandleFunc("/users", handlers.UserHandler)
+	http.HandleFunc("/transactions", handlers.TransactionHandler)
 	http.HandleFunc("/accounts", handlers.AccountHandler)
 
 	port := ":8080"

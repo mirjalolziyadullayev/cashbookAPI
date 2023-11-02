@@ -12,162 +12,152 @@ import (
 func AccountHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
+		fmt.Println("sent GET request to /account on", time.Now().Format(time.RFC822))
 		getAccounts(w, r)
 	case "POST":
+		fmt.Println("sent POST request to /accounts on", time.Now().Format(time.RFC822))
 		createAccount(w, r)
 	case "PUT":
+		fmt.Println("sent PUT request to /accounts on", time.Now().Format(time.RFC822))
 		updateAccount(w, r)
 	case "DELETE":
+		fmt.Println("sent DELETE request to /accounts on", time.Now().Format(time.RFC822))
 		deleteAccount(w, r)
 	}
 }
 
 func getAccounts(w http.ResponseWriter, r *http.Request) {
-	var accountsData []models.Account
-	byteData,_ := os.ReadFile("db/accounts.json")
-	json.Unmarshal(byteData, &accountsData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	for i := 0; i < len(accountsData); i++ {
-		var transactionsData []models.Transaction
-		byteData,_ := os.ReadFile("db/transactions.json")
-		json.Unmarshal(byteData, &transactionsData)
+	var Account []models.Account
 
-		for j := 0; j < len(transactionsData); j++ {
-			if transactionsData[j].AccountID == accountsData[i].ID {
-				accountsData[i].Transactions = append(accountsData[i].Transactions, transactionsData[j])
-			}
+	for i := 0; i < len(allUser); i++ {
+		for j := 0; j < len(allUser[i].Account); j++ {
+			Account = append(Account, allUser[i].Account[j])
 		}
 	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(accountsData)
+	
+	json.NewEncoder(w).Encode(Account)
 }
 func createAccount(w http.ResponseWriter, r *http.Request) {
 	var newAccount models.Account
 	json.NewDecoder(r.Body).Decode(&newAccount)
 
-	var accountsData []models.Account
-	byteData, _ := os.ReadFile("db/accounts.json")
-	json.Unmarshal(byteData, &accountsData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
 	var userFound bool
 
-	for i := 0; i < len(accountsData); i++ {
-		var userData []models.User
-		byteData, _ := os.ReadFile("db/users.json")
-		json.Unmarshal(byteData, &userData)
+	for i := 0; i < len(allUser); i++ {
+		if allUser[i].ID == newAccount.UserID {
+			newAccount.ID = len(allUser[i].Account) + 1
+			newAccount.Created = time.Now()
+			newAccount.Edited = time.Now()
 
-		for j := 0; j < len(userData); j++ {
-			if userData[j].ID == newAccount.UserID {
-				newAccount.ID = len(userData)+1
-				newAccount.Since = time.Now()
-				accountsData = append(accountsData, newAccount)
-				userFound = true
-				break
-			}
+			allUser[i].Account = append(allUser[i].Account, newAccount)
+			userFound = true
+			break
 		}
 	}
 	if !userFound {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("transaction with such an UserID not found")
+		fmt.Fprint(w, "user with such an UserID not found!")
 		return
 	}
 
-	result, _ := json.Marshal(accountsData)
-	os.WriteFile("db/accounts.json", result, 0)
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusCreated)
-	fmt.Println("account created!")
+	fmt.Fprint(w, "account created!")
 }
 func updateAccount(w http.ResponseWriter, r *http.Request) {
 	var updateAccount models.Account
 	json.NewDecoder(r.Body).Decode(&updateAccount)
 
-	var accountsData []models.Account
-	byteData, _ := os.ReadFile("db/accounts.json")
-	json.Unmarshal(byteData, &accountsData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	var accountFound bool
-	var userFound bool 
+	var userfound bool
+	var accountfound bool
 
-	for i := 0; i < len(accountsData); i++ {
-		if accountsData[i].ID == updateAccount.ID {
-			var userData []models.User
-			byteData, _ := os.ReadFile("db/users.json")
-			json.Unmarshal(byteData, &userData)
+	for i := 0; i < len(allUser); i++ {
+		if allUser[i].ID == updateAccount.UserID {
 
-			for j := 0; j < len(userData); j++ {
-				if userData[i].ID == updateAccount.UserID {
-					accountsData[i].Name = updateAccount.Name
-					accountsData[i].Edited = time.Now()
+			for j := 0; j < len(allUser[i].Account); j++ {
+				if allUser[i].Account[j].ID == updateAccount.ID {
+					allUser[i].Account[j].Name = updateAccount.Name
+					allUser[i].Account[j].Edited = time.Now()
 
-					userFound = true
+					accountfound = true
 					break
 				}
 			}
-			if !userFound {
+			if !accountfound {
 				w.WriteHeader(http.StatusBadRequest)
-				fmt.Println("Account with such an UserID not found")
+				fmt.Fprint(w, "account with such an ID not found!")
 				return
 			}
-			accountFound = true
+			userfound = true
 			break
 		}
 	}
-	if !accountFound {
+	if !userfound {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("Account with such an ID not found")
+		fmt.Fprint(w, "user with such an UserID not found!")
 		return
 	}
 
-	result, _ := json.Marshal(accountsData)
-	os.WriteFile("db/accounts.json", result, 0)
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusAccepted)
-	fmt.Println("account updated!")
+	fmt.Fprint(w, "account updated!")
 }
 func deleteAccount(w http.ResponseWriter, r *http.Request) {
 	var deleteAccount models.Account
 	json.NewDecoder(r.Body).Decode(&deleteAccount)
 
-	var accountsData []models.Account
-	byteData, _ := os.ReadFile("db/accounts.json")
-	json.Unmarshal(byteData, &accountsData)
+	var allUser []models.User
+	userByte, _ := os.ReadFile("db/all.json")
+	json.Unmarshal(userByte, &allUser)
 
-	var accountFound bool
-	var userFound bool
+	var userfound bool
+	var accountfound bool
 
-	for i := 0; i < len(accountsData); i++ {
-		if accountsData[i].ID == deleteAccount.ID {
-			var userData []models.User
-			byteData, _ := os.ReadFile("db/users.json")
-			json.Unmarshal(byteData, &userData)
+	for i := 0; i < len(allUser); i++ {
+		if allUser[i].ID == deleteAccount.UserID {
 
-			for j := 0; j < len(userData); j++ {
-				if userData[j].ID == deleteAccount.UserID {
-					accountsData = append(accountsData[:i], accountsData[i+1:]... )
-					userFound = true
+			for j := 0; j < len(allUser[i].Account); j++ {
+				if allUser[i].Account[j].ID == deleteAccount.ID {
+					allUser[i].Account = append(allUser[i].Account[:j], allUser[i].Account[j+1:]...)
+
+					accountfound = true
 					break
 				}
 			}
-			if !userFound {
+			if !accountfound {
 				w.WriteHeader(http.StatusBadRequest)
-				fmt.Println("Account with such an UserID not found")
+				fmt.Fprint(w, "account with such an ID not found!")
 				return
 			}
-			accountFound = true
+			userfound = true
 			break
 		}
 	}
-	if !accountFound {
+	if !userfound {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println("Account with such an ID not found")
+		fmt.Fprint(w, "user with such an UserID not found!")
 		return
 	}
 
-	result, _ := json.Marshal(accountsData)
-	os.WriteFile("db/users.json", result, 0)
+	result, _ := json.Marshal(allUser)
+	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusAccepted)
-	fmt.Println("account deleted.")
+	fmt.Fprint(w, "account deleted!")
 }
