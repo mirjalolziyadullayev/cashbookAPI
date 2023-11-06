@@ -13,7 +13,7 @@ type Account struct {
 		UserID          int
 		AccountID       int
 		Name            string
-		Value           int64
+		Value           float64
 		TransactionType bool
 		Edited          time.Time
 		Done            time.Time
