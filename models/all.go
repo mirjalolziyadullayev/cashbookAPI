@@ -12,6 +12,7 @@ type User struct {
 		ID           int
 		UserID       int
 		Name         string
+		balance      float64
 		Created      time.Time
 		Edited       time.Time
 		Transactions []struct {

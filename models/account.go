@@ -3,11 +3,12 @@ package models
 import "time"
 
 type Account struct {
-	ID      int
-	UserID  int
-	Name    string
-	Created time.Time
-	Edited  time.Time
+	ID           int
+	UserID       int
+	Name         string
+	balance      float64
+	Created      time.Time
+	Edited       time.Time
 	Transactions []struct {
 		ID              int
 		UserID          int
@@ -19,4 +20,3 @@ type Account struct {
 		Done            time.Time
 	}
 }
-
