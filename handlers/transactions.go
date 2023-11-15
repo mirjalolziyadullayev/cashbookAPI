@@ -55,6 +55,13 @@ func createTransaction(w http.ResponseWriter, r *http.Request) {
 			for j := 0; j < len(allUser[i].Account); j++ {
 				if allUser[i].Account[j].ID == newTransaction.AccountID {
 					newTransaction.ID = len(allUser[i].Account[j].Transactions)+1
+
+					if newTransaction.TransactionType == "income" || newTransaction.TransactionType == "Income" || newTransaction.TransactionType == "in" || newTransaction.TransactionType == "IN" {
+						allUser[i].Account[j].Balance += newTransaction.Value
+					} else if newTransaction.TransactionType == "outcome" || newTransaction.TransactionType == "Outcome" || newTransaction.TransactionType == "in" || newTransaction.TransactionType == "OUT" {
+						allUser[i].Account[j].Balance -= newTransaction.Value
+					}
+
 					allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions, newTransaction)
 					accountfound = true
 					break
@@ -99,6 +106,13 @@ func updateTransaction(w http.ResponseWriter, r *http.Request) {
 				if allUser[i].Account[j].ID == updateTransaction.AccountID {
 					for k := 0; k < len(allUser[i].Account[j].Transactions); k++ {
 						if allUser[i].Account[j].Transactions[k].ID == updateTransaction.ID {
+
+							if updateTransaction.TransactionType == "income" {
+								allUser[i].Account[j].Balance += updateTransaction.Value
+							} else if updateTransaction.TransactionType == "outcome" {
+								allUser[i].Account[j].Balance -= updateTransaction.Value
+							}
+
 							allUser[i].Account[j].Transactions[k].Name = updateTransaction.Name
 							allUser[i].Account[j].Transactions[k].Value = updateTransaction.Value
 							allUser[i].Account[j].Transactions[k].TransactionType = updateTransaction.TransactionType
@@ -155,6 +169,13 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 				if allUser[i].Account[j].ID == deleteTransaction.AccountID {
 					for k := 0; k < len(allUser[i].Account[j].Transactions); k++ {
 						if allUser[i].Account[j].Transactions[k].ID == deleteTransaction.ID {
+							
+							if allUser[i].Account[j].Transactions[k].TransactionType == "income" {
+								allUser[i].Account[j].Balance -= allUser[i].Account[j].Transactions[k].Value
+							} else if allUser[i].Account[j].Transactions[k].TransactionType == "outcome" {
+								allUser[i].Account[j].Balance += allUser[i].Account[j].Transactions[k].Value
+							}
+
 							allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions[:k],allUser[i].Account[j].Transactions[k+1:]... )
 
 							transactionfound = true

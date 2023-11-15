@@ -91,6 +91,7 @@ func updateAccount(w http.ResponseWriter, r *http.Request) {
 			for j := 0; j < len(allUser[i].Account); j++ {
 				if allUser[i].Account[j].ID == updateAccount.ID {
 					allUser[i].Account[j].Name = updateAccount.Name
+					allUser[i].Account[j].Balance = updateAccount.Balance
 					allUser[i].Account[j].Edited = time.Now()
 
 					accountfound = true

@@ -6,7 +6,7 @@ type Account struct {
 	ID           int
 	UserID       int
 	Name         string
-	balance      float64
+	Balance      float64
 	Created      time.Time
 	Edited       time.Time
 	Transactions []struct {
@@ -15,7 +15,7 @@ type Account struct {
 		AccountID       int
 		Name            string
 		Value           float64
-		TransactionType bool
+		TransactionType string
 		Edited          time.Time
 		Done            time.Time
 	}

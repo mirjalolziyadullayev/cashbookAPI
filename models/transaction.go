@@ -8,7 +8,7 @@ type Transactions struct {
 	AccountID       int
 	Name            string
 	Value           float64
-	TransactionType bool
+	TransactionType string
 	Edited          time.Time
 	Done            time.Time
 }
