@@ -175,9 +175,13 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 					for k := 0; k < len(allUser[i].Account[j].Transactions); k++ {
 						if allUser[i].Account[j].Transactions[k].ID == deleteTransaction.ID {
 
+							if allUser[i].Account[j].Transactions[k].TransactionType == "income" {
+								allUser[i].Account[j].Balance -= allUser[i].Account[j].Transactions[k].Value
+							} else if allUser[i].Account[j].Transactions[k].TransactionType == "outcome" {
+								allUser[i].Account[j].Balance += allUser[i].Account[j].Transactions[k].Value
+							}
+
 							allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions[:k], allUser[i].Account[j].Transactions[k+1:]...)
-						
-							json.NewEncoder(w).Encode(allUser[i].Account[j].Transactions)
 							transactionfound = true
 							break
 						}
@@ -188,7 +192,7 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					accountfound = true
-					return
+					break
 				}
 			}
 			if !accountfound {

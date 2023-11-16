@@ -10,7 +10,7 @@
                 "ID": 1,
                 "UserID": 1,
                 "Name": "UZCard",
-                "Balance": 2501212,
+                "Balance": 6000,
                 "Created": "2023-11-17T00:35:59.7565896+05:00",
                 "Edited": "2023-11-17T00:35:59.7565896+05:00",
                 "Transactions": [
@@ -18,21 +18,21 @@
                         "ID": 1,
                         "UserID": 1,
                         "AccountID": 1,
-                        "Name": "new tr",
-                        "Value": 0,
-                        "TransactionType": "",
-                        "Edited": "2023-11-17T01:09:16.8687378+05:00",
-                        "Done": "2023-11-17T01:07:16.3009177+05:00"
+                        "Name": "given for food ",
+                        "Value": 15000,
+                        "TransactionType": "income",
+                        "Edited": "2023-11-17T01:47:45.1820274+05:00",
+                        "Done": "2023-11-17T01:47:45.1820274+05:00"
                     },
                     {
                         "ID": 2,
                         "UserID": 1,
                         "AccountID": 1,
-                        "Name": "second",
-                        "Value": 1212,
-                        "TransactionType": "income",
-                        "Edited": "2023-11-17T01:16:34.1611504+05:00",
-                        "Done": "2023-11-17T01:16:34.1611504+05:00"
+                        "Name": "chocolates",
+                        "Value": 9000,
+                        "TransactionType": "outcome",
+                        "Edited": "2023-11-17T01:48:23.271721+05:00",
+                        "Done": "2023-11-17T01:48:23.271721+05:00"
                     }
                 ]
             }
