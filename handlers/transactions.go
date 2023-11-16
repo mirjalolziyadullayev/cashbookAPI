@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
 
 func TransactionHandler(w http.ResponseWriter, r *http.Request) {
@@ -54,13 +55,16 @@ func createTransaction(w http.ResponseWriter, r *http.Request) {
 		if allUser[i].ID == newTransaction.UserID {
 			for j := 0; j < len(allUser[i].Account); j++ {
 				if allUser[i].Account[j].ID == newTransaction.AccountID {
-					newTransaction.ID = len(allUser[i].Account[j].Transactions)+1
+					newTransaction.ID = len(allUser[i].Account[j].Transactions) + 1
 
-					if newTransaction.TransactionType == "income" || newTransaction.TransactionType == "Income" || newTransaction.TransactionType == "in" || newTransaction.TransactionType == "IN" {
+					if newTransaction.TransactionType == "income" {
 						allUser[i].Account[j].Balance += newTransaction.Value
-					} else if newTransaction.TransactionType == "outcome" || newTransaction.TransactionType == "Outcome" || newTransaction.TransactionType == "in" || newTransaction.TransactionType == "OUT" {
+					} else if newTransaction.TransactionType == "outcome" {
 						allUser[i].Account[j].Balance -= newTransaction.Value
 					}
+
+					newTransaction.Edited = time.Now()
+					newTransaction.Done = time.Now()
 
 					allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions, newTransaction)
 					accountfound = true
@@ -93,7 +97,7 @@ func updateTransaction(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updateTransaction)
 
 	var allUser []models.User
-	userByte,_:=os.ReadFile("db/all.json")
+	userByte, _ := os.ReadFile("db/all.json")
 	json.Unmarshal(userByte, &allUser)
 
 	var userfound bool
@@ -116,6 +120,7 @@ func updateTransaction(w http.ResponseWriter, r *http.Request) {
 							allUser[i].Account[j].Transactions[k].Name = updateTransaction.Name
 							allUser[i].Account[j].Transactions[k].Value = updateTransaction.Value
 							allUser[i].Account[j].Transactions[k].TransactionType = updateTransaction.TransactionType
+							allUser[i].Account[j].Transactions[k].Edited = time.Now()
 
 							transactionfound = true
 							break
@@ -156,7 +161,7 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&deleteTransaction)
 
 	var allUser []models.User
-	userByte, _ :=os.ReadFile("db/all.json")
+	userByte, _ := os.ReadFile("db/all.json")
 	json.Unmarshal(userByte, &allUser)
 
 	var userfound bool
@@ -169,15 +174,10 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 				if allUser[i].Account[j].ID == deleteTransaction.AccountID {
 					for k := 0; k < len(allUser[i].Account[j].Transactions); k++ {
 						if allUser[i].Account[j].Transactions[k].ID == deleteTransaction.ID {
-							
-							if allUser[i].Account[j].Transactions[k].TransactionType == "income" {
-								allUser[i].Account[j].Balance -= allUser[i].Account[j].Transactions[k].Value
-							} else if allUser[i].Account[j].Transactions[k].TransactionType == "outcome" {
-								allUser[i].Account[j].Balance += allUser[i].Account[j].Transactions[k].Value
-							}
 
-							allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions[:k],allUser[i].Account[j].Transactions[k+1:]... )
-
+							allUser[i].Account[j].Transactions = append(allUser[i].Account[j].Transactions[:k], allUser[i].Account[j].Transactions[k+1:]...)
+						
+							json.NewEncoder(w).Encode(allUser[i].Account[j].Transactions)
 							transactionfound = true
 							break
 						}
@@ -206,7 +206,7 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result,_:= json.Marshal(allUser)
+	result, _ := json.Marshal(allUser)
 	os.WriteFile("db/all.json", result, 0)
 
 	w.WriteHeader(http.StatusOK)

@@ -1,121 +1,38 @@
 [
     {
         "ID": 1,
-        "Firstname": "Joe",
-        "Lastname": "Biden",
-        "Edit": "2023-11-01T13:09:17.2382572+05:00",
-        "Created": "2023-11-01T12:42:07.2604313+05:00",
+        "Firstname": "Mirjalol",
+        "Lastname": "Ziyadullayev",
+        "Edit": "2023-11-17T00:34:25.9752307+05:00",
+        "Created": "2023-11-17T00:34:25.9752307+05:00",
         "Account": [
             {
                 "ID": 1,
                 "UserID": 1,
-                "Name": "card updated",
-                "Created": "2023-11-01T12:42:36.7669059+05:00",
-                "Edited": "2023-11-01T13:06:47.7213222+05:00",
+                "Name": "UZCard",
+                "Balance": 2501212,
+                "Created": "2023-11-17T00:35:59.7565896+05:00",
+                "Edited": "2023-11-17T00:35:59.7565896+05:00",
                 "Transactions": [
                     {
                         "ID": 1,
                         "UserID": 1,
                         "AccountID": 1,
-                        "Name": "first transaction",
-                        "Value": 5000,
-                        "TransactionType": true,
-                        "Edited": "0001-01-01T00:00:00Z",
-                        "Done": "0001-01-01T00:00:00Z"
+                        "Name": "new tr",
+                        "Value": 0,
+                        "TransactionType": "",
+                        "Edited": "2023-11-17T01:09:16.8687378+05:00",
+                        "Done": "2023-11-17T01:07:16.3009177+05:00"
                     },
                     {
                         "ID": 2,
                         "UserID": 1,
                         "AccountID": 1,
-                        "Name": "second transaction",
-                        "Value": 15000,
-                        "TransactionType": false,
-                        "Edited": "0001-01-01T00:00:00Z",
-                        "Done": "0001-01-01T00:00:00Z"
-                    }
-                ]
-            },
-            {
-                "ID": 2,
-                "UserID": 1,
-                "Name": "card updated",
-                "Created": "2023-11-01T12:42:36.7669059+05:00",
-                "Edited": "2023-11-01T13:06:47.7213222+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 3,
-                "UserID": 1,
-                "Name": "card updated",
-                "Created": "2023-11-01T12:42:36.7669059+05:00",
-                "Edited": "2023-11-01T13:06:47.7213222+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 4,
-                "UserID": 1,
-                "Name": "card updated",
-                "Created": "2023-11-01T12:42:36.7669059+05:00",
-                "Edited": "2023-11-01T13:06:47.7213222+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 5,
-                "UserID": 1,
-                "Name": "card updated",
-                "Created": "2023-11-01T12:42:36.7669059+05:00",
-                "Edited": "2023-11-01T13:06:47.7213222+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 6,
-                "UserID": 1,
-                "Name": "bank card numer 23 ",
-                "Created": "2023-11-01T13:44:56.7845529+05:00",
-                "Edited": "2023-11-01T13:44:56.7845529+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 7,
-                "UserID": 1,
-                "Name": "created now",
-                "Created": "2023-11-05T16:44:10.4901464+05:00",
-                "Edited": "2023-11-05T16:44:10.4901464+05:00",
-                "Transactions": null
-            },
-            {
-                "ID": 8,
-                "UserID": 1,
-                "Name": "created now",
-                "Created": "2023-11-05T16:44:55.8738486+05:00",
-                "Edited": "2023-11-05T16:44:55.8738486+05:00",
-                "Transactions": null
-            }
-        ]
-    },
-    {
-        "ID": 2,
-        "Firstname": "",
-        "Lastname": "",
-        "Edit": "2023-11-06T14:06:48.9174202+05:00",
-        "Created": "2023-11-06T14:06:48.9174202+05:00",
-        "Account": [
-            {
-                "ID": 1,
-                "UserID": 2,
-                "Name": "second transaction",
-                "Created": "2023-11-06T14:07:30.7875851+05:00",
-                "Edited": "2023-11-06T14:07:30.7875851+05:00",
-                "Transactions": [
-                    {
-                        "ID": 1,
-                        "UserID": 2,
-                        "AccountID": 1,
-                        "Name": "second transaction",
-                        "Value": 15000,
-                        "TransactionType": false,
-                        "Edited": "0001-01-01T00:00:00Z",
-                        "Done": "0001-01-01T00:00:00Z"
+                        "Name": "second",
+                        "Value": 1212,
+                        "TransactionType": "income",
+                        "Edited": "2023-11-17T01:16:34.1611504+05:00",
+                        "Done": "2023-11-17T01:16:34.1611504+05:00"
                     }
                 ]
             }
