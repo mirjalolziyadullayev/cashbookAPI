@@ -8,7 +8,6 @@ import (
 
 func main() {
 
-	// http.HandleFunc("/", handlers.GetHome())
 	http.HandleFunc("/users", handlers.UserHandler)
 	http.HandleFunc("/transactions", handlers.TransactionHandler)
 	http.HandleFunc("/accounts", handlers.AccountHandler)
